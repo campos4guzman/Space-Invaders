@@ -1,13 +1,23 @@
 class Juego{
-    creaCont(){
-        let div=document.getElementById("contenedor");
-        let cont=document.createElementNS("http://www.w3.org/2000/svg", 'svg');
-        cont.setAttribute("id","cont");
-        div.appendChild(cont);
+    constructor(id,alto,ancho){
+        this.id = id;
+        this.altoJuego = alto;
+        this.anchoJuego = ancho;
+        this.contJuego = document.createElement("svg");
+        this.contJuego.style.height = this.altoJuego;
+        this.contJuego.style.width = this.ancho;
+        // document.getElementById(id).appendChild(this.contJuego); 
     }
-    mover(event){
+    
+    start(){
 
+        // this.enemigos = [new enemigo(5,5,10,20,"black",this.id)]
+    
+        setInterval( () => {
+            
+        }, 1);
     }
+
     disparar(){
 
     }
@@ -15,6 +25,23 @@ class Juego{
     }
 }
 
+class enemigos{
+    constructor(x ,y ,alt ,ach ,color,id){
+        this.x = x;
+        this.y = y;
+        this.color = color;
+        this.alto = alt;
+        this.ancho = ach;
+        this.tag = document.createElementNS("http://www.w3.org/2000/svg","rect");
+        this.tag.setAttribute("x", this.x);
+        this.tag.setAttribute("y", this.y);
+        this.tag.setAttribute("width", this.ancho);
+        this.tag.setAttribute("height", this.alto);
+        this.tag.setAttribute("fill", this.color);
+        document.getElementById(id).appendChild(this.tag);
+    }
+
+}
 
 class Disparo{
     constructor(x ,y,id){
@@ -64,6 +91,4 @@ class Nave{
     }
 }
 
-
-var juego=new Juego();
-juego.creaCont();
+var juego = new Juego("juego", 100, 100);
