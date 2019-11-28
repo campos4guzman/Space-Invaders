@@ -6,7 +6,7 @@ class Juego{
         this.contJuego = document.createElement("svg");
         this.contJuego.style.height = this.altoJuego;
         this.contJuego.style.width = this.ancho;
-        // document.getElementById(id).appendChild(this.contJuego); 
+        document.getElementById(id).appendChild(this.contJuego); 
     }
     
     start(){
