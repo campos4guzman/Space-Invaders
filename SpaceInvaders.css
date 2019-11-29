@@ -1,3 +1,12 @@
+*{
+    margin: 0;
+}
+
+#juego{
+    height: 100vh;
+    width: 100vw;
+}
+
 #cont{
     border: solid 1px black;
     width: 800px;
