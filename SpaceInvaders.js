@@ -16,11 +16,26 @@ class Juego{
     }
     
     start(){
+        // Establecemos los listener de para el movimiento del jugador.
+        document.addEventListener("keydown", (e) => {this.movJugador(e)});
+        document.addEventListener("keyup", (e) => {this.parJugador(e)});
+
+        // Creamos los jugador.
+        this.jugador = new Jugador(50 ,this.altoJuego-50 ,10 ,50, 5,"black", this.svgid);
+
         // Establecemos los enemigos en la pantalla.
         this.enemy = this.posIniEne(this.fil, this.col);
         
         setInterval( () => {
             this.movEnemigos();
+
+            // Movimiento del jugador 1.
+            if (this.derecha)
+                this.jugador.movDerecha();
+            if (this.izquierda)   
+                this.jugador.movIzquierda();
+            
+            this.jugador.pintar();
         }, 10);
     }
 
@@ -50,13 +65,16 @@ class Juego{
         return enemigos2;
     }
 
-    // Mover Enemigos.
+    /**
+     *  Controla el movimiento de los enemigos.
+     * 
+     */
     movEnemigos(){
         this.izquierda = this.enemy[0].x;                                        //Punto x izquierda del cuadro gerenal de enemigos
         this.derecha = this.enemy[this.col-1].x+this.enemy[this.col-1].ancho;    //Punto x derecha del cuadro gerenal de enemigos
 
         //Cambia la direccion hacia la derecha.
-        if ((this.izquierda + this.enemy[0].velx < 0)){
+        if ((this.izquierda + this.enemy[0].vel < 0)){
             this.direccion = true;
             for (let enemigo of this.enemy){
                 enemigo.movAbajo();
@@ -64,7 +82,7 @@ class Juego{
         }
 
         //Cambia la direccion hacia la izquierda.
-        if ((this.derecha + this.enemy[0].velx > this.anchoJuego)){
+        if ((this.derecha + this.enemy[0].vel > this.anchoJuego)){
             this.direccion = false;
             for (let enemigo of this.enemy){
                 enemigo.movAbajo();
@@ -87,16 +105,36 @@ class Juego{
             enemigo.pintar();
         }
     }
+
+    /**
+     * Controla el movimiento del jugador
+     * 
+     */
+    movJugador(e){
+        //Jugador 1.
+        if(e.keyCode == 39)
+            this.derecha = true;
+        if(e.keyCode == 37)
+            this.izquierda = true;
+    }
+
+    parJugador(e){
+        //Juegador 1.
+        if(e.keyCode == 39)
+            this.derecha = false;
+        if(e.keyCode == 37)
+            this.izquierda = false;
+    }
 }
 
 class enemigos{
-    constructor(x ,y ,alt ,ach ,color, velx, id){
+    constructor(x ,y ,alt ,ach ,color, vel, id){
         this.x = x;
         this.y = y;
         this.color = color;
         this.alto = alt;
         this.ancho = ach;
-        this.velx = velx;
+        this.vel = vel;
         this.tag = document.createElementNS("http://www.w3.org/2000/svg","rect");
         this.tag.setAttribute("x", this.x);
         this.tag.setAttribute("y", this.y);
@@ -109,17 +147,17 @@ class enemigos{
     // Movimiento de la nave.
     // Movimiento a la derecha de la nave
     movDerecha(){
-        this.x += this.velx;
+        this.x += this.vel;
     }
 
     // Movimiento a la izquirda de la nave.
     movIzquierda(){
-        this.x -= this.velx;
+        this.x -= this.vel;
     }
 
     // Movimiento hacia abajo de la nave.
     movAbajo(){
-        this.y += this.velx;
+        this.y += this.vel;
     }
 
     // Pintamos la nueva posicion de la nave
@@ -154,26 +192,37 @@ class Disparo{
 }
 
 
-class Nave{
-    constructor(x, y,alto,ancho,velx,id){
-        this.x=x;
-        this.y=y;
-        this.alto=alto;
-        this.ancho=ancho;
-        this.velx=velx;
-        this.nave=document.createElementNS("http://www.w3.org/2000/svg","rect");
-        this.nave.setAttribute("x",this.x);
-        this.nave.setAttribute("y",this.y);  
-        this.nave.setAttribute("id",this.id);
-        this.nave.setAttribute("width",this.ancho);
-        this.nave.setAttribute("height",this.alto);
-        document.getElementById(id).appendChild(this.nave);
+class Jugador{
+    constructor(x ,y ,alt ,ach , vel, color, id){
+        this.x = x;
+        this.y = y;
+        this.color = color;
+        this.alto = alt;
+        this.ancho = ach;
+        this.vel = vel;
+        this.tag = document.createElementNS("http://www.w3.org/2000/svg","rect");
+        this.tag.setAttribute("x", this.x);
+        this.tag.setAttribute("y", this.y);
+        this.tag.setAttribute("width", this.ancho);
+        this.tag.setAttribute("height", this.alto);
+        this.tag.setAttribute("fill", this.color);
+        document.getElementById(id).appendChild(this.tag);
     }
-    mover(){
-        if(this.x+this.velx<0 || this.x+this.velx+this.ancho>document.getElementById(id).getAttribute("height")){
-            this.velx *= -1;
+
+    movDerecha(){
+        if(this.x + this.alto < 800){
+            this.x += this.vel;
         }
-        this.x+=this.velx;
+    }
+
+    movIzquierda(){
+        if(this.x > 0){
+            this.x -= this.vel;
+        }
+    }
+
+    pintar(){
+        this.tag.setAttribute("x", this.x);
     }
 }
 
