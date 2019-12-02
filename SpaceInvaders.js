@@ -160,7 +160,7 @@ class enemigos{
 
     // Movimiento hacia abajo de la nave.
     movAbajo(){
-        this.y += this.vel;
+        this.y += this.vel*10;
     }
 
     // Pintamos la nueva posicion de la nave
@@ -170,31 +170,10 @@ class enemigos{
     }
 }
 
-class Disparo{
-    constructor(x ,y,id){
-        this.x = x;
-        this.y = y;
-        this.color = color;
-        this.tag = document.createElementNS("http://www.w3.org/2000/svg","rect");
-        this.tag.setAttribute("x", this.x);
-        this.tag.setAttribute("y", this.y);
-        this.tag.setAttribute("width", this.ancho);
-        this.tag.setAttribute("height", this.alto);
-        this.tag.setAttribute("fill", this.color);
-        document.getElementById("caja").appendChild(this.tag);
-    }
-
-    moverArriba(){
-        if(this.y > 0){
-            this.y = this.y - 5;
-        }
-    }
-    pintar(){
-        this.tag.setAttribute("y", this.y);
-    }
-}
-
-
+/**
+ * Clase Jugador
+ * 
+ */
 class Jugador{
     constructor(x ,y ,alt ,ach , vel, color, id){
         this.x = x;
@@ -212,12 +191,15 @@ class Jugador{
         document.getElementById(id).appendChild(this.tag);
     }
 
+    // Movimiento del Jugador
+    // Movimiento hacia la derecha
     movDerecha(){
         if(this.x + this.alto < 800){
             this.x += this.vel;
         }
     }
 
+    // Movimiento a la Izquierda.
     movIzquierda(){
         if(this.x > 0){
             this.x -= this.vel;
@@ -227,6 +209,14 @@ class Jugador{
     pintar(){
         this.tag.setAttribute("x", this.x);
     }
+}
+
+/**
+ *  Clase Disparo
+ *  
+ */
+class Disparo{
+
 }
 
 
