@@ -15,6 +15,9 @@ class Juego{
         document.getElementById(id).appendChild(this.contJuego); 
     }
     
+    /**
+     * Metodo que hace que el juego Comience
+     */
     start(){
         // Establecemos los listener de para el movimiento del jugador.
         document.addEventListener("keydown", (e) => {this.movJugador(e)});
@@ -108,7 +111,7 @@ class Juego{
 
     /**
      * Controla el movimiento del jugador
-     * 
+     * @param {Evento} e
      */
     movJugador(e){
         //Jugador 1.
@@ -117,7 +120,10 @@ class Juego{
         if(e.keyCode == 37)
             this.izquierda = true;
     }
-
+    /**
+     * Para el Movimiento del jugador
+     * @param {Evento} e 
+     */
     parJugador(e){
         //Juegador 1.
         if(e.keyCode == 39)
@@ -216,11 +222,16 @@ class Jugador{
  *  
  */
 class Disparo{
+    constructor(){
+        
+    }
 
 }
 
-
-// Ejecucion del programa.
+/**
+ * Ejecucion del Codigo.
+ * 
+ */
 window.onload = () => {
     var juego = new Juego("juego", 800, 800);
     juego.start();
