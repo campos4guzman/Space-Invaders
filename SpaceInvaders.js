@@ -56,7 +56,7 @@ class Juego{
         for (let i=0; i<fil; i++){                                                              // Recorremos todas la fila de enemigos a dibujar.
             posx = 5;                                                                           // Inicalizamos la posicion de la x.
             for (let j=0; j<col; j++){                                                          // Recorremos todas la columnas de enemigos a dibujar.
-                enemigos2.push(new enemigos(posx, posy, alto, ancho, "black", 3,this.svgid));   // Metemos un enemigo con las coordenadas y dimensiones expuestas.
+                enemigos2.push(new enemigos(posx, posy, alto, ancho, "black", 1,this.svgid));   // Metemos un enemigo con las coordenadas y dimensiones expuestas.
                 posx += (ancho + 5);                                                            // Cambiamos el punto x del rectangulo.
             }
             posy += (alto + 5) ;
@@ -70,11 +70,11 @@ class Juego{
      * 
      */
     movEnemigos(){
-        this.izquierda = this.enemy[0].x;                                        //Punto x izquierda del cuadro gerenal de enemigos
-        this.derecha = this.enemy[this.col-1].x+this.enemy[this.col-1].ancho;    //Punto x derecha del cuadro gerenal de enemigos
+        this.pizquierda = this.enemy[0].x;                                        //Punto x izquierda del cuadro gerenal de enemigos
+        this.pderecha = this.enemy[this.col-1].x+this.enemy[this.col-1].ancho;    //Punto x derecha del cuadro gerenal de enemigos
 
         //Cambia la direccion hacia la derecha.
-        if ((this.izquierda + this.enemy[0].vel < 0)){
+        if ((this.pizquierda + this.enemy[0].vel < 0)){
             this.direccion = true;
             for (let enemigo of this.enemy){
                 enemigo.movAbajo();
@@ -82,7 +82,7 @@ class Juego{
         }
 
         //Cambia la direccion hacia la izquierda.
-        if ((this.derecha + this.enemy[0].vel > this.anchoJuego)){
+        if ((this.pderecha + this.enemy[0].vel > this.anchoJuego)){
             this.direccion = false;
             for (let enemigo of this.enemy){
                 enemigo.movAbajo();
@@ -126,7 +126,10 @@ class Juego{
             this.izquierda = false;
     }
 }
-
+/**
+ *  Clase enemigos
+ * 
+ */
 class enemigos{
     constructor(x ,y ,alt ,ach ,color, vel, id){
         this.x = x;
@@ -144,7 +147,7 @@ class enemigos{
         document.getElementById(id).appendChild(this.tag);
     }
     
-    // Movimiento de la nave.
+    // Movimiento de lod enemigos.
     // Movimiento a la derecha de la nave
     movDerecha(){
         this.x += this.vel;
@@ -227,7 +230,7 @@ class Jugador{
 }
 
 
-
+// Ejecucion del programa.
 window.onload = () => {
     var juego = new Juego("juego", 800, 800);
     juego.start();
