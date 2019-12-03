@@ -23,15 +23,25 @@ class Juego{
         document.addEventListener("keydown", (e) => {this.movJugador(e)});
         document.addEventListener("keyup", (e) => {this.parJugador(e)});
 
-        // Creamos los jugador.
-        this.jugador = new Jugador(50 ,this.altoJuego-50 ,10 ,50, 5,"black", this.svgid);
 
+        // Creamos los jugador.
+        this.jugador = new Jugador(250 ,this.altoJuego-100 ,100 ,100, 5, this.svgid);
+
+        this.disparo=new Disparo(this.jugador.x+46,this.jugador.y+10,30,10,5,this.svgid);
+
+    
         // Establecemos los enemigos en la pantalla.
         this.enemy = this.posIniEne(this.fil, this.col);
         
         setInterval( () => {
+
             this.movEnemigos();
 
+            //Empieza a disparar
+            this.disparo.disparar(this.jugador.x+46,this.jugador.y+10);
+            this.disparo.pintar();
+            this.disparo.contacto(this.disparo,this.enemy,this.contJuego);
+            
             // Movimiento del jugador 1.
             if (this.derecha)
                 this.jugador.movDerecha();
@@ -39,9 +49,13 @@ class Juego{
                 this.jugador.movIzquierda();
             
             this.jugador.pintar();
+            
+            
         }, 10);
+
     }
 
+    
     /**
      *  Posicionamiento inicial de los enemigos en la pantalla
      * 
@@ -59,7 +73,7 @@ class Juego{
         for (let i=0; i<fil; i++){                                                              // Recorremos todas la fila de enemigos a dibujar.
             posx = 5;                                                                           // Inicalizamos la posicion de la x.
             for (let j=0; j<col; j++){                                                          // Recorremos todas la columnas de enemigos a dibujar.
-                enemigos2.push(new enemigos(posx, posy, alto, ancho, "black", 1,this.svgid));   // Metemos un enemigo con las coordenadas y dimensiones expuestas.
+                enemigos2.push(new enemigos(posx, posy, alto, ancho, 1,this.svgid));   // Metemos un enemigo con las coordenadas y dimensiones expuestas.
                 posx += (ancho + 5);                                                            // Cambiamos el punto x del rectangulo.
             }
             posy += (alto + 5) ;
@@ -73,9 +87,13 @@ class Juego{
      * 
      */
     movEnemigos(){
-        this.pizquierda = this.enemy[0].x;                                        //Punto x izquierda del cuadro gerenal de enemigos
-        this.pderecha = this.enemy[this.col-1].x+this.enemy[this.col-1].ancho;    //Punto x derecha del cuadro gerenal de enemigos
-
+        try {
+            this.pizquierda = this.enemy[0].x;                                        //Punto x izquierda del cuadro gerenal de enemigos
+            this.pderecha = this.enemy[this.col-1].x+this.enemy[this.col-1].ancho;    //Punto x derecha del cuadro gerenal de enemigos
+        } catch (error) {
+            
+        }
+        
         //Cambia la direccion hacia la derecha.
         if ((this.pizquierda + this.enemy[0].vel < 0)){
             this.direccion = true;
@@ -131,25 +149,25 @@ class Juego{
         if(e.keyCode == 37)
             this.izquierda = false;
     }
+
 }
 /**
  *  Clase enemigos
  * 
  */
 class enemigos{
-    constructor(x ,y ,alt ,ach ,color, vel, id){
+    constructor(x ,y ,alt ,ach , vel, id){
         this.x = x;
         this.y = y;
-        this.color = color;
         this.alto = alt;
         this.ancho = ach;
         this.vel = vel;
-        this.tag = document.createElementNS("http://www.w3.org/2000/svg","rect");
+        this.tag = document.createElementNS("http://www.w3.org/2000/svg","image");
         this.tag.setAttribute("x", this.x);
         this.tag.setAttribute("y", this.y);
         this.tag.setAttribute("width", this.ancho);
         this.tag.setAttribute("height", this.alto);
-        this.tag.setAttribute("fill", this.color);
+        this.tag.setAttribute("href","enemigo.png");
         document.getElementById(id).appendChild(this.tag);
     }
     
@@ -181,26 +199,25 @@ class enemigos{
  * 
  */
 class Jugador{
-    constructor(x ,y ,alt ,ach , vel, color, id){
+    constructor(x ,y ,alt ,ach , vel, id){
         this.x = x;
         this.y = y;
-        this.color = color;
         this.alto = alt;
         this.ancho = ach;
         this.vel = vel;
-        this.tag = document.createElementNS("http://www.w3.org/2000/svg","rect");
+        this.tag = document.createElementNS("http://www.w3.org/2000/svg","image");
         this.tag.setAttribute("x", this.x);
         this.tag.setAttribute("y", this.y);
         this.tag.setAttribute("width", this.ancho);
         this.tag.setAttribute("height", this.alto);
-        this.tag.setAttribute("fill", this.color);
+        this.tag.setAttribute("href","nave.png");
         document.getElementById(id).appendChild(this.tag);
     }
 
     // Movimiento del Jugador
     // Movimiento hacia la derecha
     movDerecha(){
-        if(this.x + this.alto < 800){
+        if(this.x + this.ancho < 600){
             this.x += this.vel;
         }
     }
@@ -222,10 +239,48 @@ class Jugador{
  *  
  */
 class Disparo{
-    constructor(){
-        
+    constructor(x ,y ,alt ,ach , vel, id){
+        this.x = x;
+        this.y = y;
+        this.alto = alt;
+        this.ancho = ach;
+        this.vel = vel;
+        this.tag = document.createElementNS("http://www.w3.org/2000/svg","image");
+        this.tag.setAttribute("x", this.x);
+        this.tag.setAttribute("y", this.y);
+        this.tag.setAttribute("width", this.ancho);
+        this.tag.setAttribute("height", this.alto);
+        this.tag.setAttribute("href","disparo.png");
+        document.getElementById(id).appendChild(this.tag);
     }
 
+
+    /**
+     * Controla el disparo del jugador
+     * @param {Evento} e
+     */
+    disparar(jx,alto){
+        this.y -= this.vel;
+        if(this.y+this.vel<0){
+            this.x=jx;
+            this.y=alto;
+        }
+    }
+    
+
+    contacto(disparo,enemy,contJuego){
+        for(var i=0;i<enemy.length;i++){
+            if(disparo.x>=enemy[i].x && disparo.x<=enemy[i].x+40 && disparo.y==enemy[i].y+20){
+                contJuego.removeChild(enemy[i].tag);
+                enemy.splice(i,1);
+            }
+        }
+    }
+
+    pintar(){
+        this.tag.setAttribute("x", this.x);
+        this.tag.setAttribute("y",this.y);
+    }
 }
 
 /**
@@ -233,6 +288,6 @@ class Disparo{
  * 
  */
 window.onload = () => {
-    var juego = new Juego("juego", 800, 800);
+    var juego = new Juego("juego", 600, 600);
     juego.start();
 }
