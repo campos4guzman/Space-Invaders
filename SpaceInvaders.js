@@ -89,13 +89,20 @@ class Juego{
     movEnemigos(){
         try {
             this.pizquierda = this.enemy[0].x;                                        //Punto x izquierda del cuadro gerenal de enemigos
-            this.pderecha = this.enemy[this.col-1].x+this.enemy[this.col-1].ancho;    //Punto x derecha del cuadro gerenal de enemigos
+            this.pderecha = this.enemy[Math.ceil((this.enemy.length/this.col)-1)].x+this.enemy[Math.ceil((this.enemy.length/this.col)-1)].ancho;    //Punto x derecha del cuadro gerenal de enemigos
         } catch (error) {
-            
         }
         
+
+        var cont=0;
+        var colision=0;
+        do{
+            
+            this.cont++;
+        }while(cont<this.enemy.length || colision==true);
+        colision=false;
         //Cambia la direccion hacia la derecha.
-        if ((this.pizquierda + this.enemy[0].vel < 0)){
+        if (colision=="derecha"){
             this.direccion = true;
             for (let enemigo of this.enemy){
                 enemigo.movAbajo();
@@ -103,7 +110,7 @@ class Juego{
         }
 
         //Cambia la direccion hacia la izquierda.
-        if ((this.pderecha + this.enemy[0].vel > this.anchoJuego)){
+        if (colision == "izquierda"){
             this.direccion = false;
             for (let enemigo of this.enemy){
                 enemigo.movAbajo();
@@ -125,6 +132,7 @@ class Juego{
         for (let enemigo of this.enemy){
             enemigo.pintar();
         }
+
     }
 
     /**
@@ -175,6 +183,7 @@ class enemigos{
     // Movimiento a la derecha de la nave
     movDerecha(){
         this.x += this.vel;
+
     }
 
     // Movimiento a la izquirda de la nave.
@@ -192,6 +201,12 @@ class enemigos{
         this.tag.setAttribute("x", this.x);
         this.tag.setAttribute("y", this.y);
     }
+
+    comprobar(){
+        
+    }
+
+
 }
 
 /**
