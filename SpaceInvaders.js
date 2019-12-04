@@ -4,8 +4,8 @@ class Juego{
         this.altoJuego = alto;
         this.anchoJuego = ancho;
         this.direccion = true;
-        this.col = 4;
-        this.fil = 3;
+        this.col = 6;
+        this.fil = 5;
         this.svgid = "svgid";
         this.contJuego = document.createElementNS("http://www.w3.org/2000/svg","svg");
         this.contJuego.setAttribute("height", this.altoJuego);
@@ -217,7 +217,7 @@ class Jugador{
     // Movimiento del Jugador
     // Movimiento hacia la derecha
     movDerecha(){
-        if(this.x + this.ancho < 600){
+        if(this.x + this.ancho < 800){
             this.x += this.vel;
         }
     }
@@ -288,6 +288,6 @@ class Disparo{
  * 
  */
 window.onload = () => {
-    var juego = new Juego("juego", 600, 600);
+    var juego = new Juego("juego", 800, 800);
     juego.start();
 }
