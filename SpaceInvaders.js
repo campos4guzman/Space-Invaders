@@ -27,6 +27,7 @@ class Juego{
         // Creamos los jugador.
         this.jugador = new Jugador(250 ,this.altoJuego-100 ,100 ,100, 5, this.svgid);
 
+        // Creamos el disparo.
         this.disparo=new Disparo(this.jugador.x+46,this.jugador.y+10,30,10,5,this.svgid);
 
     
@@ -96,10 +97,10 @@ class Juego{
 
         var cont=0;
         var colision=0;
-        do{
+        /*do{
             
             this.cont++;
-        }while(cont<this.enemy.length || colision==true);
+        }while(cont<this.enemy.length || colision==true);*/
         colision=false;
         //Cambia la direccion hacia la derecha.
         if (colision=="derecha"){
